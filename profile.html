@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sai Vineela Peddinti | Software Developer</title>
+<meta name="description" content="Sai Vineela Peddinti: Python web developer and GenAI engineer building data dashboards, APIs, and LLM systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,500;6..72,600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F4F7FB; --ink: #14213D; --muted: #4A5B73; --card: #FFFFFF; --rule: #D5DEEA;
+    --teal: #0A8F92; --coral: #E8553A; --violet: #6C4DE6; --sun: #F5A300; --pink: #DB2777;
+    --focus: #6C4DE6;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0E1626; --ink: #EEF3FA; --muted: #A9B6CC; --card: #162238; --rule: #2A3A56;
+      --teal: #4FD1C5; --coral: #FF8A70; --violet: #A99BFF; --sun: #FFD166; --pink: #FF6FAE;
+      --focus: #FFD166;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+    font-size: 1.0625rem; line-height: 1.6;
+    padding-top: env(safe-area-inset-top, 0px);
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+  a { color: var(--violet); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .5rem 1rem; z-index: 10; }
+  .skip:focus { left: 1rem; top: 1rem; }
+
+  /* Ambient background blobs */
+  .blob { position: fixed; border-radius: 50%; filter: blur(70px); opacity: .45; pointer-events: none; z-index: 0; }
+  .blob.b1 { width: 420px; height: 420px; background: var(--pink); top: -120px; left: -100px; }
+  .blob.b2 { width: 380px; height: 380px; background: var(--sun); top: 30vh; right: -140px; }
+  .blob.b3 { width: 360px; height: 360px; background: var(--teal); bottom: -120px; left: 30%; }
+
+  /* Top bar */
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; font-size: .95rem; gap: 1rem; }
+  .topbar strong { background: linear-gradient(90deg, var(--coral), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .topbar nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .topbar nav a { color: var(--ink); text-decoration: none; padding: .2rem .1rem; border-bottom: 2px solid transparent; }
+  .topbar nav a:hover { border-bottom-color: var(--pink); }
+  .btn {
+    display: inline-block; padding: .7rem 1.2rem; border-radius: 999px; font-weight: 700;
+    text-decoration: none; color: #fff;
+    background: linear-gradient(120deg, var(--coral), var(--pink), var(--violet));
+    background-size: 200% 200%;
+    box-shadow: 0 8px 20px -8px rgba(219,39,119,.6);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 26px -10px rgba(219,39,119,.7); }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--rule); box-shadow: none; }
+  .btn.ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* Hero */
+  .hero { padding: 4rem 0 4rem; display: grid; grid-template-columns: 1.15fr .85fr; gap: 3.5rem; align-items: center; }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 300;
+    font-variation-settings: "opsz" 72; font-size: clamp(3.2rem, 8vw, 6.2rem);
+    line-height: .92; letter-spacing: -.025em; margin: 0 0 1.5rem;
+  }
+  .name b {
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--coral), var(--pink), var(--violet), var(--teal), var(--coral));
+    background-size: 300% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .role { font-size: 1.3rem; margin: 0 0 1rem; max-width: 34ch; }
+  .intro { color: var(--muted); max-width: 54ch; margin: 0 0 2rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: 1.5rem; }
+  .meta { color: var(--muted); font-size: .95rem; margin: 0; }
+  .pill { display: inline-block; margin-top: .25rem; padding: .25rem .8rem; border-radius: 999px; background: var(--card); border: 1px solid var(--rule); font-size: .9rem; }
+
+  /* Chart */
+  .chart-panel { margin: 0; background: var(--card); border: 1px solid var(--rule); border-radius: 20px; padding: 1.35rem 1.35rem .9rem; box-shadow: 0 24px 50px -30px rgba(20,33,61,.35); }
+  .chart-panel h2 { margin: 0; font-family: "Newsreader", Georgia, serif; font-weight: 500; font-size: 1.45rem; }
+  .chart-panel .cap { margin: 0 0 .75rem; color: var(--muted); font-size: .95rem; }
+  .chart-panel svg { width: 100%; height: auto; display: block; }
+  .bar { transform-box: fill-box; transform-origin: left center; }
+  .c-violet { fill: var(--violet); } .c-teal { fill: var(--teal); } .c-coral { fill: var(--coral); }
+  .c-sun { fill: var(--sun); } .c-pink { fill: var(--pink); }
+  .bar-label { font-size: 12px; fill: var(--ink); font-weight: 600; }
+  .axis-label { font-size: 11px; fill: var(--muted); }
+  .axis-line { stroke: var(--rule); }
+  .legend { display: flex; gap: 1.25rem; font-size: .875rem; color: var(--muted); margin-top: .5rem; }
+  .legend span::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: .4rem; vertical-align: -1px; border-radius: 3px; }
+  .legend .work::before { background: linear-gradient(120deg, var(--violet), var(--teal), var(--coral)); }
+  .legend .edu::before { background: linear-gradient(120deg, var(--sun), var(--pink)); }
+
+  /* Sections */
+  section { padding: 4rem 0; position: relative; }
+  h2.sec { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: clamp(2.1rem, 4vw, 2.9rem); line-height: 1.1; margin: 0 0 2rem; letter-spacing: -.01em; display: inline-block; }
+  h2.sec::after { content: ""; display: block; height: 10px; margin-top: -4px; border-radius: 6px; background: linear-gradient(90deg, var(--sun), var(--coral), var(--pink)); opacity: .75; }
+  .about { font-size: 1.25rem; max-width: 62ch; margin: 0; }
+
+  .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+  .projects li {
+    background: var(--card); border-radius: 18px; padding: 1.4rem 1.3rem 1.3rem; border: 1px solid var(--rule);
+    border-top: 6px solid var(--c, var(--violet));
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .projects li:hover { transform: translateY(-6px); box-shadow: 0 20px 36px -22px var(--c, var(--violet)); }
+  .projects h3 { font-family: "Newsreader", Georgia, serif; font-weight: 500; font-size: 1.45rem; margin: 0 0 .5rem; line-height: 1.2; }
+  .projects p { margin: 0 0 .6rem; color: var(--muted); }
+  .projects .stack { font-size: .9rem; color: var(--c, var(--violet)); font-weight: 700; }
+
+  .job { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; padding: 1.75rem 1.5rem; margin: 0 0 1.25rem; background: var(--card); border-radius: 18px; border-left: 6px solid var(--c, var(--violet)); }
+  .when { color: var(--muted); font-size: .95rem; }
+  .when strong { display: block; color: var(--c, var(--violet)); font-size: 1.15rem; font-family: "Newsreader", Georgia, serif; font-weight: 500; }
+  .job h3 { margin: 0 0 .5rem; font-size: 1.2rem; font-weight: 700; }
+  .job ul { margin: 0; padding-left: 1.1rem; }
+  .job li { margin-bottom: .4rem; }
+
+  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin: 0; }
+  .skills > div { background: var(--card); border-radius: 16px; padding: 1.2rem 1.3rem; border: 1px solid var(--rule); }
+  .skills dt { font-weight: 700; margin-bottom: .4rem; color: var(--c, var(--teal)); }
+  .skills dd { margin: 0; }
+
+  .edu-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+  .edu-list li { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; padding: 1rem 1.3rem; background: var(--card); border-radius: 14px; border: 1px solid var(--rule); }
+  .edu-list .yrs { font-weight: 700; color: var(--sun); }
+
+  .cta { padding: 4.5rem 0; }
+  .cta .panel { background: linear-gradient(120deg, var(--violet), var(--pink) 55%, var(--coral)); color: #fff; border-radius: 28px; padding: 3rem 2.5rem; box-shadow: 0 30px 60px -30px rgba(108,77,230,.7); }
+  .cta h2 { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: clamp(2rem, 4.5vw, 3rem); margin: 0 0 1.25rem; line-height: 1.1; }
+  .cta .btn { background: #fff; color: var(--violet); box-shadow: none; }
+  .cta .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.8); }
+  .cta .btn.ghost:hover { background: #fff; color: var(--violet); }
+  footer { padding: 2rem 0 3rem; color: var(--muted); font-size: .9rem; text-align: center; }
+  footer p { margin: 0; }
+
+  /* Scroll reveal: content is visible unless JavaScript has enabled the effect */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+    .blob { animation: drift 18s ease-in-out infinite alternate; }
+    .blob.b2 { animation-duration: 22s; animation-delay: -6s; }
+    .blob.b3 { animation-duration: 26s; animation-delay: -12s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(60px,40px) scale(1.12); } }
+    .name b { animation: gradient-shift 8s linear infinite; }
+    @keyframes gradient-shift { from { background-position: 0% 50%; } to { background-position: 300% 50%; } }
+    .btn.primary, .hero .btn:first-of-type { animation: sheen 6s ease-in-out infinite; }
+    @keyframes sheen { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .hero-in > * { opacity: 0; animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+    .hero-in > *:nth-child(2) { animation-delay: .12s; }
+    .hero-in > *:nth-child(3) { animation-delay: .24s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .bar { animation: grow 1000ms cubic-bezier(.2,.7,.2,1) both; }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; padding-top: 2.5rem; gap: 2.5rem; }
+    .projects { grid-template-columns: 1fr; }
+    .job, .edu-list li { grid-template-columns: 1fr; gap: .5rem; }
+    .skills { grid-template-columns: 1fr; }
+    .topbar nav { display: none; }
+    .cta .panel { padding: 2rem 1.5rem; }
+  }
+
+  @media print {
+    .blob, .topbar, .actions, .skip, .chart-panel, .cta { display: none; }
+    body { background: #fff; color: #000; }
+    section { padding: 1.25rem 0; break-inside: avoid; }
+    .job, .skills > div, .edu-list li { background: none; border: 0; }
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add("js");</script>
+<div class="blob b1" aria-hidden="true"></div>
+<div class="blob b2" aria-hidden="true"></div>
+<div class="blob b3" aria-hidden="true"></div>
+
+<a class="skip" href="#about">Skip to content</a>
+<div class="wrap">
+
+  <header class="topbar">
+    <strong>Sai Vineela Peddinti</strong>
+    <nav aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="hero-in">
+      <h1 class="name">Sai Vineela <b>Peddinti</b></h1>
+      <p class="role">Software developer building Python web platforms, data dashboards, and GenAI systems.</p>
+      <p class="intro">Over 10 years of experience across web development, machine learning, API design, and enterprise SAP. I turn complex data into interfaces people can use to make decisions.</p>
+      <div class="actions">
+        <a class="btn" href="mailto:vineelasai_buddhe@yahoo.com">Get in touch</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/sai-vineelapeddinti-27185413a" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn ghost" href="data:application/pdf;base64,JVBERi0xLjQKJZOMi54gUmVwb3J0TGFiIEdlbmVyYXRlZCBQREYgZG9jdW1lbnQgKG9wZW5zb3VyY2UpCjEgMCBvYmoKPDwKL0YxIDIgMCBSIC9GMiAzIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYSAvRW5jb2RpbmcgL1dpbkFuc2lFbmNvZGluZyAvTmFtZSAvRjEgL1N1YnR5cGUgL1R5cGUxIC9UeXBlIC9Gb250Cj4+CmVuZG9iagozIDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQgL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcgL05hbWUgL0YyIC9TdWJ0eXBlIC9UeXBlMSAvVHlwZSAvRm9udAo+PgplbmRvYmoKNCAwIG9iago8PAovQ29udGVudHMgOCAwIFIgL01lZGlhQm94IFsgMCAwIDYxMiA3OTIgXSAvUGFyZW50IDcgMCBSIC9SZXNvdXJjZXMgPDwKL0ZvbnQgMSAwIFIgL1Byb2NTZXQgWyAvUERGIC9UZXh0IC9JbWFnZUIgL0ltYWdlQyAvSW1hZ2VJIF0KPj4gL1JvdGF0ZSAwIC9UcmFucyA8PAoKPj4gCiAgL1R5cGUgL1BhZ2UKPj4KZW5kb2JqCjUgMCBvYmoKPDwKL1BhZ2VNb2RlIC9Vc2VOb25lIC9QYWdlcyA3IDAgUiAvVHlwZSAvQ2F0YWxvZwo+PgplbmRvYmoKNiAwIG9iago8PAovQXV0aG9yIChTYWkgVmluZWVsYSBQZWRkaW50aSkgL0NyZWF0aW9uRGF0ZSAoRDoyMDI2MTAyOTIyMDYyOCswMCcwMCcpIC9DcmVhdG9yIChcKHVuc3BlY2lmaWVkXCkpIC9LZXl3b3JkcyAoKSAvTW9kRGF0ZSAoRDoyMDI2MTAyOTIyMDYyOCswMCcwMCcpIC9Qcm9kdWNlciAoUmVwb3J0TGFiIFBERiBMaWJyYXJ5IC0gXChvcGVuc291cmNlXCkpIAogIC9TdWJqZWN0IChcKHVuc3BlY2lmaWVkXCkpIC9UaXRsZSAoU2FpIFZpbmVlbGEgUGVkZGludGkgLSBSZXN1bWUpIC9UcmFwcGVkIC9GYWxzZQo+PgplbmRvYmoKNyAwIG9iago8PAovQ291bnQgMSAvS2lkcyBbIDQgMCBSIF0gL1R5cGUgL1BhZ2VzCj4+CmVuZG9iago4IDAgb2JqCjw8Ci9GaWx0ZXIgWyAvQVNDSUk4NURlY29kZSAvRmxhdGVEZWNvZGUgXSAvTGVuZ3RoIDIwMzEKPj4Kc3RyZWFtCkdiISNcRC9cL2UmSDg4LkU/RiImRzRhcStJQDpmc0QqIzojLEhucTYhIT1oIygpciowLjRWPFRycUlLXz1dI2VaOSIsOWQhZ25qPm5UWVM6SGdabihmX0ZXc2NTLE1ePi85KnIiLSpiSSdmXlpnTFcnWnMoJ2UxVlM4LjMlbE9ANjhPNz4jIm5iXG5ARWtUMGw0aWNzZUBpUF1KSk5GIkY1Lz1Sckg/aWFEYE1IalpjLWwjRjBBSGo+SzI3RylSTG0hJTs4ZnRSRGRgKVEoO0ZPYCs3XGZeamhaMmdGIjVAPispUl1faFxjc2smV1Q1ajU4bFs+bUljNDFFPGpMc09gQVYyb2g1MGtWPScvODBWdTY4JkstbCcqQTA2IigqIkZRO0VkK1luVlNyJzJEbD1pMnRhdGwxW01bK29bWz5ZJGRXYDQzcU1pYmBdO2pXWWI1PnBEU1tFYi4ya0xGTG5abltmaENSVTM8N2ojITlTdDVbNEolI1ZTP3Q9LzQ7LSpsL1Q8WTJgXzkqMlxiNiVQN0FIcGAwXCpkM2EkUzg/JEdMa3FTKSFQKD9eLDdTZFMnaWdJNWEzI1ByYSdnaiIyam1abjlBVU9kLCM4PEtjO0RJMGQoKzRrSkhQJ3JyIzQ5cy9Nbl5KUXUyTyk5JmAhWV4wajhsIzxVcWV0Tj5EYmZwNzhoOS4ldXEhXzZvZFhTOi9WaW82a21JWWE6IjA4RGFaPVU6SU9idS4+V3JQcihjZChEUUZjUztqKzMnYEwtbUotLT4vLTFDRkpMaTAnNyIhUWhYI0trOlg9MGRVN2VWWkkxbU5BSjosJzIpTmtScD0+dDBBamIhYmMoOUAsV1Z1JGpXWi50PiE0ayhNVFNWdVMzZXA/SjBiTT9lbCEyRWxGITlKci8nVGA7SWVIamU5QUFrPjlfNGwsTy45PTVjOUtRIjpjIVJBdXM8LE03KkdHQD1KNVwpKSloci9POTpRTGRIaDVILlNWWTpsLUw0bC5XKEc4akZfO05lSCY+QlQ3P1ZXbjIvbV1RRiEzXVFAcEJOPjErTzVaYD0wSnJBNytFK2szKFYsbWhTbz9iX0FXMkt0c2YnJENAO15zTypTJ0MqTzlcYEwlcyZUVl40L1FKUyZcXkdoJDAuPXMxc0VEZD1PT2VmJnEqWStKYHJHMkk5M04lYVE1bE5LWD9fa1tfNSU5aDU3UlpMSCl1LzVjLUFIVyN0aVkkPU1ZTGZmSk9GWlc5RGk3I01FV0QkPTV0I2MxQF47LW4hKSRTX1MkaG9WUGsqPmduYVBINkglMTZgamAkLG1TXkJMUiJjKTZfcExqc1lZdTYiJU5VRV9EIVxaOm0tX245cltHcjZEW10jTDcqYmFhcyNdWCRkYlpWUSlUSExdciZwJyFiMzBPXmpuYWwrKVw+TjRLbWhDMUNYVWI7KDxMIW9mR3A0VDM1QG1hVF8uTSclcjEiViJybychXjwvS1RjT00hIk5GLS48VDs6YyFkSFBbQSo1VzVqOk5nU0opbVwuJkRzLVYwIzxzUlsyW21OOmpRNk9aITc1PyRmb15GQHJsLUNldUlOalI/LDoxcyNjQCEqMERgSmpOKSpxVUA2ZjZuQy8/ZDZDQig5VS1kO1NBY2MpQ0RccnVZMj9HNDY1LTNIZClpYHVUcT5qNSJCPTZgPF5IRUdyZEtUXmM5IywzIUVRTEFXXigqUFY8Zi8sVSk/OTlTXWRlJF9QOWBcKUY5PUcjY2U+bUJISEcqbTpAIUVkPEluK0V1UksvTTRlSFQjVUdXWWNmK0hdcHVNJlNgOj5cbidybzhhcCdKLGInMmhnQ0VaUEEhS2dPSGVaXDMpJEgnTyYtSz4hOENPckMxOz8objtpaCVYRXVpMk5WY05gRDgzSHBza2E6Sj01YTtLWUw3bG5eP1QiSks7Y2RZI14oQ2FxYVJpLy4rTFViNUgoPkpdbikzZjs0XCk/TCU0WEEhKzskN243b1tJImc4LVRFXWZkMlM3YSUyWDNwYEx0WzlrQXJIRGpEKlArSjJfaiZqKjdhJG8ublVGJ2AtPWFMS1dwaVtCQGZZKGpaRjA1JTpCWUReSCokQjlyRVdlITxjbEI1ZCtbWFdVO3RPTk1eQSlqNDhvIjhoNS00al82KU01Sik6K3FsMCJfa2NCVmg9NylmUD50cSYuTnBfNSVJIkMsQ0xxXzpcMk8tNihEU2tbOGIqWExOako9XGFTNV4rJzBAWElyOyNcXEEkbD44a0knLEllVGxgNlwxSURPVV9pLGVNZnRmIU0ycSJXW2omKXA+KUBSXVhaWDtCVzY0amlGYVtRYG1rZWFTOSVzYWY7KypMKTo3akBGPGRpZVQyJj01LVs0SjlaXW43XipPSlVLJytbVDowUSo5WjNga3RINCpTXHMiQjxuWE5FZi5zV3FWaD5sXlRMSWtjNV1sYV4ocz4/VjAyRUFWRHRATTpWOjFvTVhdSz9rQTpcdTVDLzddSSFFcWA+KGVKcFo4R1JKOW5NZCJlOWM0K0BObEtgbUs4R1tkMUMpMElJc3EoRFAlZz8zUyw7J1tSWE4pWztOSCZbRj1rczVCWy8tUC40Syc1QFBoZSxyZmRZUnFYUV1PUCZRSThGajxBOSs3dW9sJj1lX1dDISJwZnBIUzhnaDtlLj0rOUQhNGFRKiYqO2c4SWYqNGV+PmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDYxIDAwMDAwIG4gCjAwMDAwMDAxMDIgMDAwMDAgbiAKMDAwMDAwMDIwOSAwMDAwMCBuIAowMDAwMDAwMzIxIDAwMDAwIG4gCjAwMDAwMDA1MTQgMDAwMDAgbiAKMDAwMDAwMDU4MiAwMDAwMCBuIAowMDAwMDAwODg1IDAwMDAwIG4gCjAwMDAwMDA5NDQgMDAwMDAgbiAKdHJhaWxlcgo8PAovSUQgCls8YjY2NDNjNmJjNjJiYmFjMTY0Mzg1YzM3MDQzODk0ZDE+PGI2NjQzYzZiYzYyYmJhYzE2NDM4NWMzNzA0Mzg5NGQxPl0KJSBSZXBvcnRMYWIgZ2VuZXJhdGVkIFBERiBkb2N1bWVudCAtLSBkaWdlc3QgKG9wZW5zb3VyY2UpCgovSW5mbyA2IDAgUgovUm9vdCA1IDAgUgovU2l6ZSA5Cj4+CnN0YXJ0eHJlZgozMDY2CiUlRU9GCg==" download="Sai_Vineela_Peddinti_Resume.pdf">Download resume (PDF)</a>
+      </div>
+      <p class="meta"><span class="pill">McKinney, Texas, United States</span></p>
+    </div>
+
+    <figure class="chart-panel" aria-labelledby="chart-title">
+      <h2 id="chart-title">Career timeline</h2>
+      <p class="cap">Work and education, by years.</p>
+      <svg id="timeline" viewBox="0 0 560 250" role="img" aria-describedby="timeline-desc">
+        <desc id="timeline-desc">Horizontal bars showing employment: Wipro Technologies 2010 to 2014, Infosys 2014 to 2019, IT rYSources 2022 to present. Education: B.Tech 2004 to 2008, M.Tech 2008 to 2010.</desc>
+      </svg>
+      <figcaption class="legend"><span class="work">Work</span><span class="edu">Education</span></figcaption>
+    </figure>
+  </div>
+
+  <section id="about" aria-labelledby="about-title">
+    <h2 class="sec reveal" id="about-title">About</h2>
+    <p class="about reveal">I build data visualization dashboards and high-performance APIs with Flask, FastAPI, and GraphQL, with React front ends. I also build agent-based and LLM-powered applications. My work covers the full path from idea to deployment, with attention to security, clean API design, and performance.</p>
+  </section>
+
+  <section id="work" aria-labelledby="work-title">
+    <h2 class="sec reveal" id="work-title">Selected work</h2>
+    <ul class="projects">
+      <li class="reveal" style="--c: var(--coral)">
+        <h3>Flight demand prediction</h3>
+        <p>Machine learning models deployed for American Airlines to forecast flight demand.</p>
+        <p class="stack">FastAPI, Azure App Service, containerization</p>
+      </li>
+      <li class="reveal" style="--c: var(--teal)">
+        <h3>Budget optimizer</h3>
+        <p>A finance application for RBS that applies gradient descent to optimize budgets.</p>
+        <p class="stack">Python, gradient descent</p>
+      </li>
+      <li class="reveal" style="--c: var(--violet)">
+        <h3>GenAI agent systems</h3>
+        <p>Agent-based and LLM-powered solutions that streamline workflows.</p>
+        <p class="stack">LangChain, LangGraph, CrewAI, AutoGen, Hugging Face</p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="experience" aria-labelledby="exp-title">
+    <h2 class="sec reveal" id="exp-title">Experience</h2>
+
+    <article class="job reveal" style="--c: var(--violet)">
+      <div class="when"><strong>IT rYSources</strong>October 2022 to present<br>United States</div>
+      <div>
+        <h3>Python Gen AI Developer, Lead Python Web Developer</h3>
+        <ul>
+          <li>Build agent-based systems and LLM-powered solutions with LangChain, LangGraph, CrewAI, AutoGen, and Hugging Face.</li>
+          <li>Deliver data visualization dashboards and high-performance APIs using FastAPI, Flask, and GraphQL.</li>
+          <li>Create responsive user interfaces with HTML, CSS, JavaScript, and ReactJS.</li>
+          <li>Lead end-to-end application development, scalable backend systems, and third-party integrations.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="job reveal" style="--c: var(--teal)">
+      <div class="when"><strong>Infosys</strong>March 2014 to December 2019<br>India</div>
+      <div>
+        <h3>Technology Analyst, Software Developer, SAP and Python</h3>
+        <ul>
+          <li>Deployed machine learning models for flight demand prediction for American Airlines, using FastAPI and Azure App Service.</li>
+          <li>Built a budget optimizer application for RBS using Python and gradient descent.</li>
+          <li>Developed SAP applications across RICEFW objects, including ALV reports that combine multiple custom tables, and implemented SAP OSS notes.</li>
+          <li>Built object-oriented programs and transferred data between SAP and other systems with IDocs, ALE, and RFCs.</li>
+          <li>Built OData proofs of concept and APIs. Functional knowledge of MM and EWM.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="job reveal" style="--c: var(--coral)">
+      <div class="when"><strong>Wipro Technologies</strong>December 2010 to March 2014</div>
+      <div>
+        <h3>Project Engineer</h3>
+        <ul>
+          <li>Developed ABAP reports, data dictionary objects, and module pool programs.</li>
+          <li>Built applications in Python and SQL.</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section id="skills" aria-labelledby="skills-title">
+    <h2 class="sec reveal" id="skills-title">Skills</h2>
+    <dl class="skills">
+      <div class="reveal" style="--c: var(--pink)"><dt>AI and machine learning</dt><dd>LangChain, LangGraph, CrewAI, AutoGen, Hugging Face, NumPy, machine learning model deployment</dd></div>
+      <div class="reveal" style="--c: var(--teal)"><dt>Web and APIs</dt><dd>Python, Flask, FastAPI, GraphQL, ReactJS, JavaScript, HTML, CSS, API development</dd></div>
+      <div class="reveal" style="--c: var(--sun)"><dt>Data and cloud</dt><dd>Data visualization dashboards, database management, SQL, Azure App Service, containerization</dd></div>
+      <div class="reveal" style="--c: var(--violet)"><dt>Enterprise SAP</dt><dd>ABAP, ALV reports, SAP ALE, SAP OOP, IDocs, RFCs, OData, OSS notes, MM and EWM</dd></div>
+    </dl>
+  </section>
+
+  <section id="education" aria-labelledby="edu-title">
+    <h2 class="sec reveal" id="edu-title">Education</h2>
+    <ul class="edu-list">
+      <li class="reveal"><span class="yrs">2008 to 2010</span><span>M.Tech, Digital Systems, Jawaharlal Nehru Technological University</span></li>
+      <li class="reveal"><span class="yrs">2004 to 2008</span><span>B.Tech, Biomedical Engineering, Gokaraju Rangaraju Institute of Engineering and Technology</span></li>
+    </ul>
+  </section>
+
+  <section class="cta" id="contact" aria-labelledby="contact-title">
+    <div class="panel reveal">
+      <h2 id="contact-title">Let's build something useful together.</h2>
+      <div class="actions">
+        <a class="btn" href="mailto:vineelasai_buddhe@yahoo.com">vineelasai_buddhe@yahoo.com</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/sai-vineelapeddinti-27185413a" target="_blank" rel="noopener">Connect on LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Sai Vineela Peddinti, McKinney, Texas.</p>
+  </footer>
+</div>
+
+<script>
+  // Timeline: data-driven bars. Colours cycle through the palette.
+  const rows = [
+    { label: "Wipro Technologies", type: "work", c: "c-violet", start: 2010.92, end: 2014.25, text: "2010 to 2014" },
+    { label: "Infosys", type: "work", c: "c-teal", start: 2014.2, end: 2019.92, text: "2014 to 2019" },
+    { label: "IT rYSources", type: "work", c: "c-coral", start: 2022.8, end: 2026.8, text: "2022 to present" },
+    { label: "B.Tech", type: "edu", c: "c-sun", start: 2004.6, end: 2008.4, text: "2004 to 2008" },
+    { label: "M.Tech", type: "edu", c: "c-pink", start: 2008.7, end: 2010.8, text: "2008 to 2010" }
+  ];
+  const svg = document.getElementById("timeline");
+  const NS = "http://www.w3.org/2000/svg";
+  const x0 = 120, x1 = 540, y0 = 36, rowH = 40, barH = 18;
+  const yMin = 2004, yMax = 2027;
+  const sx = y => x0 + (y - yMin) / (yMax - yMin) * (x1 - x0);
+  const el = (name, attrs, text) => {
+    const n = document.createElementNS(NS, name);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text) n.textContent = text;
+    return n;
+  };
+  [2004, 2008, 2012, 2016, 2020, 2024].forEach(y => {
+    svg.appendChild(el("line", { x1: sx(y), x2: sx(y), y1: y0 - 8, y2: y0 + rows.length * rowH, class: "axis-line" }));
+    svg.appendChild(el("text", { x: sx(y), y: 230, "text-anchor": "middle", class: "axis-label" }, String(y)));
+  });
+  rows.forEach((r, i) => {
+    const y = y0 + i * rowH;
+    svg.appendChild(el("text", { x: x0 - 12, y: y + barH - 4, "text-anchor": "end", class: "bar-label" }, r.label));
+    const bar = el("rect", { x: sx(r.start), y: y, width: sx(r.end) - sx(r.start), height: barH, rx: 4, class: "bar " + r.c });
+    bar.setAttribute("aria-label", r.label + ", " + r.text);
+    svg.appendChild(bar);
+  });
+
+  // Scroll reveal: adds .in when each element enters the viewport.
+  const items = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    items.forEach(el => io.observe(el));
+  } else {
+    items.forEach(el => el.classList.add("in"));
+  }
+</script>
+</body>
+</html>
